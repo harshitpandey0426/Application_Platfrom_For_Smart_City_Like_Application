@@ -16,18 +16,19 @@ import communication_module as cm
 configschema = {
     "type": "object",
     "properties": {
-        "userid": {"type": "number"},
-        "reqid": {"type": "number"},
-        "appid": {"type": "number"},
-        "algoid": {"type": "number"},
+        "userid": {"type": "string"},
+        "reqid": {"type": "string"},
+	"form":{"type":"string"},
+        "appid": {"type": "string"},
+        "algoid": {"type": "string"},
         "priority":{"type": "string"},
         "action":{"type": "string"},
-        "start":{"type": "number"},
-        "end":{"type": "number"},
-        "duration":{"type": "number"},
+        "start":{"type": "string"},
+        "end":{"type": "string"},
+        "duration":{"type": "string"},
         "location":{"type": "string"},
-        "frequency":{"type": "number"},
-        "freq_days":{"type": "number"},
+        "frequency":{"type": "string"},
+        "freq_days":{"type": "string"},
         "sensortype":{"type": "string"},
         "requesttype":{"type": "string"},
         "old/runningservice":{"type":"string"},
@@ -79,18 +80,14 @@ def threaded(c):
                 con = [x.rstrip() for x in con] 
 
             # print(con)
-            for i in range(7):
+            for i in range(len(con)):
                 s=con[i]
                 y=[]
                 y=s.split(":")
-                print(y)
-                conf[y[0]]=int(y[1])
-            for i in range(7,len(con)):
-                s=con[i]
-                y=[]
-                y=s.split(":")
-                conf[y[0]]=y[1]
-            conf["reqid"]=reqid
+                if(y[0]=="start_time" or y[0]=="end_time"):
+                    y[1]=y[1]+":"+y[2]
+                conf[y[0]]=str(y[1])
+            conf["reqid"]=str(reqid)
             y_n=conf["old/runningservice"]
             reqid=reqid+1
             y1 = json.dumps(conf)    #Python to JSON
@@ -136,17 +133,12 @@ def threaded(c):
                     con = [x.rstrip() for x in con] 
 
             # print(con)
-                for i in range(7):
+                for i in range(len(con)):
                     s=con[i]
                     y=[]
                     y=s.split(":")
-                    conf[y[0]]=int(y[1])
-                for i in range(7,len(con)):
-                    s=con[i]
-                    y=[]
-                    y=s.split(":")
-                    conf[y[0]]=y[1]
-                conf["reqid"]=reqid
+                    conf[y[0]]=str(y[1])
+                conf["reqid"]=str(reqid)
                 y_n=conf["old/runningservice"]
                 reqid=reqid+1
                 y1 = json.dumps(conf)    #Python to JSON
